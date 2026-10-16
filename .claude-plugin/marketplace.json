@@ -1,0 +1,16 @@
+{
+  "name": "claude-team-kit",
+  "owner": {
+    "name": "Wilfredo Colon"
+  },
+  "description": "How our team works with Claude Code: research, milestones, issues and review, packaged as one plugin.",
+  "plugins": [
+    {
+      "name": "flow",
+      "source": "./plugins/flow",
+      "description": "Skills for each phase of our workflow (setup-project, research, plan-milestones, work-on-issue, review-pr) plus our shared agents.",
+      "category": "engineering",
+      "keywords": ["workflow", "github", "milestones", "issues", "code-review", "research"]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "recommendations": [
+    "anthropic.claude-code",
+    "github.vscode-pull-request-github",
+    "github.vscode-github-actions",
+    "editorconfig.editorconfig",
+    "streetsidesoftware.code-spell-checker",
+    "redhat.vscode-yaml"
+  ],
+  "_byStack": {
+    "typescript-vue-react": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "vue.volar", "vitest.explorer"],
+    "rust": ["rust-lang.rust-analyzer", "tamasfe.even-better-toml", "vadimcn.vscode-lldb"],
+    "python": ["ms-python.python", "ms-python.vscode-pylance", "ms-python.debugpy", "charliermarsh.ruff"],
+    "go": ["golang.go"],
+    "containers": ["ms-azuretools.vscode-containers", "ms-vscode-remote.remote-containers"],
+    "terraform": ["hashicorp.terraform"],
+    "c-cpp": ["ms-vscode.cpptools-extension-pack"]
+  }
+}

@@ -34,7 +34,6 @@
       "Bash(git diff:*)",
       "Bash(git log:*)",
       "Bash(git show:*)",
-      "Bash(git branch:*)",
       "Bash(gh issue view:*)",
       "Bash(gh issue list:*)",
       "Bash(gh pr view:*)",
@@ -48,11 +47,11 @@
       "Bash(gh run view:*)"
     ],
     "deny": [
-      "Read(./.env)",
-      "Read(./.env.*)",
+      "Read(./**/.env)",
+      "Read(./**/.env.*)",
       "Read(./**/*.pem)",
       "Read(./**/*.key)",
-      "Read(./secrets/**)"
+      "Read(./**/secrets/**)"
     ]
   }
 }

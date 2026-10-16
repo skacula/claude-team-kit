@@ -63,7 +63,7 @@ To update later: `claude plugin marketplace update claude-team-kit` and `claude 
 
 Open the repo in VS Code, open the Claude Code panel and run `/flow:setup-project`. It looks at the repo first, tells you what it will add, and then opens a PR with:
 - **`AGENTS.md`**, plus a one-line `CLAUDE.md` that imports it for Claude Code: the contract every session reads first, whatever the tool or model: commands, architecture, invariants, conventions, testing patterns. It's filled in from the repo itself, and each command is run to make sure it works.
-- **`.claude/settings.json`**: enables this plugin for everyone who trusts the folder, pre-approves read-only `git`/`gh` commands, and stops Claude from reading `.env` files and keys.
+- **`.claude/settings.json`**: enables this plugin for everyone who trusts the folder, pre-approves read-only `git`/`gh` commands, and stops Claude's Read tool from opening `.env` files and keys in any folder.
 - **`.vscode/extensions.json`**: the extensions for this repo's stack. VS Code offers them when you open the folder.
 - **PR and issue templates**, the standard **labels** (`area:*`, `os:*`, `follow-up`, `phase-gate`), and `.gitignore` entries for personal files.
 

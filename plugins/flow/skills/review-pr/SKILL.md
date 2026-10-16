@@ -24,7 +24,7 @@ gh pr checks <N>
 ```
 - Read the linked issue(s) in full, with comments, and their milestone's acceptance criteria. That's the definition of done.
 - Read the repo's instructions file (`AGENTS.md`, or `CLAUDE.md`/`QWEN.md` if that's what it has). Its invariants and "must also update" rules are the checklist for this repo.
-- Read existing review comments (`gh api "repos/{owner}/{repo}/pulls/<N>/comments"` and `gh pr view <N> --comments`) so you don't repeat them.
+- Read existing review comments (`gh api --paginate "repos/{owner}/{repo}/pulls/<N>/comments"` and `gh pr view <N> --comments`) so you don't repeat them. Without `--paginate` you get only the first 30.
 
 To run anything, check the PR out. First run `git status`; if the tree has uncommitted changes, ask the user before switching branches. Then `gh pr checkout <N>`. For a long review, a separate git worktree keeps the user's checkout untouched.
 
@@ -84,7 +84,11 @@ The PR link, the verdict, the blocking items in one line each, the checks run, a
 
 ## 6. Addressing review comments on your own PR
 
-1. Gather every unresolved comment: `gh pr view <N> --comments` and `gh api "repos/{owner}/{repo}/pulls/<N>/comments"`.
+1. Gather every unresolved comment. The REST comments API doesn't say which threads are resolved, so read the review threads through GraphQL and keep those with `isResolved: false` (reply with the `databaseId` of the thread's first comment in step 4; GitHub rejects replies to replies):
+   ```bash
+   gh api graphql -F owner='{owner}' -F repo='{repo}' -F n=<N> -f query='query($owner:String!,$repo:String!,$n:Int!){repository(owner:$owner,name:$repo){pullRequest(number:$n){reviewThreads(first:100){nodes{isResolved path line comments(first:50){nodes{databaseId author{login} body}}}}}}}'
+   ```
+   Add the PR's general comments from `gh pr view <N> --comments`.
 2. List them for the user with what you plan for each: **fix**, **disagree** (with the reason), or **question for the reviewer**. A comment that asks for a product decision goes to the user.
 3. After the user agrees, fix each in its own small commit (message names what it addresses), run the repo's checks, and push.
 4. Draft a reply per comment (what changed and the commit, or why not) and post the replies once the user approves: `gh api -X POST "repos/{owner}/{repo}/pulls/<N>/comments/<comment-id>/replies" -F body=@<file>`. Leave resolving threads to the reviewer.

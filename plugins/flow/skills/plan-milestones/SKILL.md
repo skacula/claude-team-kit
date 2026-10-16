@@ -56,7 +56,11 @@ Create in this order, skipping anything that already exists with the same title 
    ```bash
    gh api "repos/{owner}/{repo}/milestones" -f title="M1: <name>" -F description=@<file>
    ```
-3. **Issues**, in milestone order, so that `Depends on #N` can name real numbers. Write each body to a file with your file-writing tool (not a heredoc, so it works on every OS), then:
+3. **Issues**, in milestone order, so that `Depends on #N` can name real numbers. The list from section 1 stops at 200 issues, so check each title right before creating it, and skip it if an issue with that title is returned:
+   ```bash
+   gh issue list --state all --search "\"M1.2:\" in:title" --json number,title,state
+   ```
+   Write each body to a file with your file-writing tool (not a heredoc, so it works on every OS), then:
    ```bash
    gh issue create --title "M1.2: <title>" --body-file <file> --milestone "M1: <name>" --label "area:<x>" --label "os:<y>"
    ```
@@ -70,6 +74,6 @@ Report the milestone URLs and the number of issues created per milestone.
 When asked for status, or after a PR merges:
 - Read the milestones and issues as in section 1, plus recently merged PRs: `gh pr list --state merged --limit 30 --json number,title,mergedAt,closingIssuesReferences`.
 - In the plan file: tick slices whose issue is closed (with the PR number), update the status table (⬜ not started, 🟡 in progress, ✅ done), and add new issues that appeared in a milestone (follow-ups) under it.
-- Flag drift both ways: an issue closed without its plan line ticked, a plan line with no issue, an issue whose milestone changed, an open issue whose acceptance boxes are all ticked.
+- Flag drift both ways: an issue closed without its plan line ticked, a plan line with no issue (search its title as in section 4 before flagging it, since the list stops at 200), an issue whose milestone changed, an open issue whose acceptance boxes are all ticked.
 - A milestone with no open issues left: check its acceptance criteria were actually demonstrated (a gate needs its end-to-end check run), then **ask** before closing it: `gh api -X PATCH "repos/{owner}/{repo}/milestones/<n>" -f state=closed`.
 - Report: per milestone, done/total, what's in progress (open PRs), what's next, and anything blocked on a decision.

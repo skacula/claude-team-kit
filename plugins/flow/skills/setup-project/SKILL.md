@@ -41,7 +41,7 @@ Start from [templates/settings.json](templates/settings.json). It points at `ska
 Explain what it does:
 - When a teammate trusts this folder in Claude Code, it offers to add the marketplaces and install `flow` and the plugins the team pairs with it: `ponytail`, `pstack` and code-metrics. If the project doesn't want one of them, remove it from `enabledPlugins` and say so in the PR. ponytail and pstack are pinned to a release tag (`ref`); keep the pin.
 - The `allow` list only covers read-only commands, so nothing that changes state runs without asking.
-- The `deny` list blocks reading env files and keys.
+- The `deny` list stops Claude's Read tool from opening env files, keys and `secrets/` folders anywhere in the repo. It doesn't cover shell commands such as `cat`, which still ask first.
 
 Claude Code enforces these rules whichever model it runs. Other tools have their own permission settings. Tell the user to keep those in the mode that asks before editing files or running commands, especially with smaller models.
 

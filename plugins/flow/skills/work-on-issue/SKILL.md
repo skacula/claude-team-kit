@@ -137,7 +137,7 @@ For a slice that touches several files or layers, or leaves choices open, write 
 
 ## 5. Findings outside the change → new issues
 
-While reviewing and working, you'll notice real problems the issue doesn't cover: other bugs, inconsistencies, missing validation, stale docs. Don't fold them into this PR. They make it harder to review and risk regressions nobody asked for. File each one as its own issue, without asking first:
+While reviewing and working, you'll notice real problems the issue doesn't cover: other bugs, inconsistencies, missing validation, stale docs. Don't fold them into this PR. They make it harder to review and risk regressions nobody asked for. List them for the user, then file each one as its own issue after their OK:
 
 1. **Make sure it's real.** Reproduce it or point to the exact lines. Check that it exists on the default branch, and wasn't introduced by your change. If your change introduced it, it isn't a finding: fix it in the branch.
 2. **Check for duplicates** with `gh search issues --repo <owner/repo> "<key words>" --state open`. If one exists, comment there with the new detail instead of filing again.

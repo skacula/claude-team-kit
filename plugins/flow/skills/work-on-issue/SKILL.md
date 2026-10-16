@@ -108,6 +108,7 @@ Take the prefix from the repo's existing branch names (e.g. `wcolon/`). Make the
 For a slice that touches several files or layers, or leaves choices open, write a short plan first (files to change, tests to add, choices and your recommendation) and get the user's OK before editing. Use your tool's plan mode if it has one. A one-file fix doesn't need a plan.
 
 ### Do the work
+- If `pstack` is installed, its `poteto-mode` playbooks may drive this step, and `ponytail` keeps the diff to the smallest complete change. They shape how the code is written. This skill still decides how it reaches GitHub: when a playbook's own branch or PR step differs, follow this skill's conventions and gates.
 - Keep the change scoped to the issue. When you notice something else, write it down for step 5 and don't fix it here, unless leaving it would make this change wrong.
 - Follow the instructions file to the letter. Rules like "a new route must also go in X" or "adding an error kind means updating these four places" are why repo tests exist. Never weaken an invariant it lists to make a change easier; if one is in the way, stop and ask.
 - Add or update tests for both the positive and the negative cases. Every frontend change gets tests that validate it.

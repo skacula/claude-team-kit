@@ -11,9 +11,19 @@ claude plugin marketplace add skacula/claude-team-kit
 claude plugin install flow@claude-team-kit
 ```
 
-Restart your Claude session and type `/flow:` to see the skills.
+Then the plugins we pair with it:
 
-**Using Qwen or another model?** The kit isn't tied to Claude models: run Claude Code on Ollama, Qwen or OpenRouter, install it into Qwen Code with `qwen extensions install skacula/claude-team-kit:flow`, or into other agent tools with `npx skills add skacula/claude-team-kit`. See [docs/other-models.md](docs/other-models.md). In a repo that's been set up with `/flow:setup-project`, Claude Code offers the plugin when you trust the folder, so you can skip this step there.
+```sh
+claude plugin marketplace add DietrichGebert/ponytail#v5.3.1
+claude plugin marketplace add michael-denyer/pstack-claude#v0.9.86
+claude plugin install ponytail@ponytail
+claude plugin install pstack@pstack-claude
+claude plugin install code-metrics-complexity-and-duplication-report@anthropic-plugin-directory
+```
+
+Restart your Claude session and type `/flow:` to see the skills. Run these in a terminal: the VS Code chat panel has no `/plugin` command. The `#v…` tags pin a release; to upgrade, bump them here, in `docs/tools.md` and in `plugins/flow/skills/setup-project/templates/settings.json` in one PR. In a repo that's been set up with `/flow:setup-project`, Claude Code offers all four plugins when you trust the folder, so you can skip these steps there.
+
+**Using Qwen or another model?** The kit isn't tied to Claude models: run Claude Code on Ollama, Qwen or OpenRouter, install it into Qwen Code with `qwen extensions install skacula/claude-team-kit:flow`, or into other agent tools with `npx skills add skacula/claude-team-kit`. See [docs/other-models.md](docs/other-models.md).
 
 ## What's in it
 
@@ -32,6 +42,10 @@ Restart your Claude session and type `/flow:` to see the skills.
 | `qa-automation-engineer` | Test strategy and test automation across web, mobile and backend |
 | `frontend-design-expert` | Frontend implementation with a design eye |
 | `vscode-extension-expert` | Building and debugging VS Code extensions |
+
+## The plugins around flow
+
+`flow` owns the process: phases, GitHub conventions and human gates. Three paired plugins shape the work inside each step: `ponytail`, `pstack` and code-metrics. [docs/how-to-guide.md](docs/how-to-guide.md#the-plugins-around-flow) says what each does and which helper to reach for in each phase.
 
 ## Read next
 

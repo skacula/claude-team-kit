@@ -23,6 +23,9 @@ After installing: `gh auth login`, `claude` then `/login`, and `claude doctor`.
 | Piece | What it is | How you get it |
 |---|---|---|
 | `flow` plugin | Our skills (`setup-project`, `research`, `plan-milestones`, `work-on-issue`, `review-pr`) and agents (`rust-reviewer`, `ui-ux-reviewer`, `qa-automation-engineer`, `frontend-design-expert`, `vscode-extension-expert`) | `claude plugin marketplace add skacula/claude-team-kit`, then `claude plugin install flow@claude-team-kit`; or automatically when you trust a repo set up with `/flow:setup-project` |
+| `ponytail` plugin | Always-on "smallest complete change" mode, plus `/ponytail-review`, `/ponytail-audit` and `/ponytail-debt`. Its hooks need `node` on the PATH | `claude plugin marketplace add DietrichGebert/ponytail#v5.3.1`, then `claude plugin install ponytail@ponytail` |
+| `pstack` plugin | `poteto-mode` playbooks and skills such as `how`, `why`, `architect`, `tdd`, `thermos`, `interrogate`, `babysit`. Its session hook is a shell script (Git Bash on Windows) | `claude plugin marketplace add michael-denyer/pstack-claude#v0.9.86`, then `claude plugin install pstack@pstack-claude` |
+| code-metrics plugin | Local complexity and duplication reports: `/code-metrics-tracker:metrics`, `/code-metrics-tracker:refactor-targets`. Needs Python 3 | `claude plugin install code-metrics-complexity-and-duplication-report@anthropic-plugin-directory` (Anthropic's built-in directory; no marketplace to add) |
 | Built-in skills | `/code-review`, `/security-review`, `/simplify`, `/init`, `/memory`, plan mode, `/rewind` | Ship with Claude Code |
 | Claude account skills | `deep-research`, `docx`, `pdf`, `pptx`, `xlsx`, `skill-creator` | Available when enabled on your claude.ai account; optional |
 | `find-skills` (optional) | Searches the open skills ecosystem for a skill that fits a task | `npx skills add vercel-labs/skills` and pick `find-skills` |

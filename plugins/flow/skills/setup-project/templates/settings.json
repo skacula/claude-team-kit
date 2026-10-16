@@ -6,10 +6,27 @@
         "source": "github",
         "repo": "skacula/claude-team-kit"
       }
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail",
+        "ref": "v5.3.1"
+      }
+    },
+    "pstack-claude": {
+      "source": {
+        "source": "github",
+        "repo": "michael-denyer/pstack-claude",
+        "ref": "v0.9.86"
+      }
     }
   },
   "enabledPlugins": {
-    "flow@claude-team-kit": true
+    "flow@claude-team-kit": true,
+    "ponytail@ponytail": true,
+    "pstack@pstack-claude": true,
+    "code-metrics-complexity-and-duplication-report@anthropic-plugin-directory": true
   },
   "permissions": {
     "allow": [

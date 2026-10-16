@@ -18,6 +18,8 @@ Put the settings in the repo's **`.claude/settings.local.json`**. It's git-ignor
 
 The reviewer agents use `model: inherit`, so they run on whatever model the session uses. Claude Code's background tasks use the `haiku` alias, which is why each example below maps all three aliases.
 
+pstack's subagents also ask for `fable`, so each example maps it too. To run them on the session's model instead, run `/pstack:setup-pstack` and set its roles to `inherit-parent`.
+
 ### Local, free and private: Ollama
 
 Nothing leaves your machine. This needs Ollama 0.14 or later and a machine that can run a capable coding model. `qwen3-coder` (30B) is about a 20 GB download; plan on 32 GB of memory, or a GPU with 24 GB.
@@ -37,7 +39,8 @@ Nothing leaves your machine. This needs Ollama 0.14 or later and a machine that 
        "ANTHROPIC_MODEL": "qwen3-coder",
        "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3-coder",
        "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3-coder",
-       "ANTHROPIC_DEFAULT_HAIKU_MODEL": "qwen3-coder"
+       "ANTHROPIC_DEFAULT_HAIKU_MODEL": "qwen3-coder",
+       "ANTHROPIC_DEFAULT_FABLE_MODEL": "qwen3-coder"
      }
    }
    ```
@@ -57,7 +60,8 @@ Alibaba offers an Anthropic-compatible endpoint for Claude Code. The URL depends
     "ANTHROPIC_MODEL": "<model name from the same guide>",
     "ANTHROPIC_DEFAULT_OPUS_MODEL": "<same>",
     "ANTHROPIC_DEFAULT_SONNET_MODEL": "<same>",
-    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "<a smaller Qwen model, or the same>"
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "<a smaller Qwen model, or the same>",
+    "ANTHROPIC_DEFAULT_FABLE_MODEL": "<same as ANTHROPIC_MODEL>"
   }
 }
 ```
@@ -73,7 +77,8 @@ Alibaba offers an Anthropic-compatible endpoint for Claude Code. The URL depends
     "ANTHROPIC_MODEL": "<an OpenRouter model id, e.g. a qwen/… coder model>",
     "ANTHROPIC_DEFAULT_OPUS_MODEL": "<same>",
     "ANTHROPIC_DEFAULT_SONNET_MODEL": "<same>",
-    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "<same or smaller>"
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "<same or smaller>",
+    "ANTHROPIC_DEFAULT_FABLE_MODEL": "<same as ANTHROPIC_MODEL>"
   }
 }
 ```
@@ -104,6 +109,10 @@ npx skills add skacula/claude-team-kit -a <agent>      # e.g. -a codex, -a openc
 ```
 
 Most of these tools read `AGENTS.md`. The reviewer agents aren't installed this way, because each tool has its own agent format. Ask the tool to "read `plugins/flow/agents/rust-reviewer.md` from the kit and review this branch following it", or convert the file to that tool's format (for OpenCode, `.opencode/agent/`).
+
+### The paired plugins on other tools
+
+ponytail and pstack also ship for other agent tools. ponytail's [INSTALL.md](https://github.com/DietrichGebert/ponytail/blob/main/INSTALL.md) covers Codex, GitHub Copilot CLI, OpenCode, Kimi Code and others. pstack ports to Codex, Copilot and Pi. Neither documents Qwen Code; it may install them from their marketplaces as it does `flow`, but we haven't tested that.
 
 ## What to expect from the model
 

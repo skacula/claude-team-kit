@@ -39,7 +39,7 @@ This is the contract every session reads first, so it must be accurate and short
 Start from [templates/settings.json](templates/settings.json). It points at `skacula/claude-team-kit`; if step 0 showed the marketplace coming from somewhere else (a fork), use that source instead. If the file exists, merge the keys: add the marketplace and the plugin, and add the permission rules that aren't already there. Don't remove the user's rules.
 
 Explain what it does:
-- When a teammate trusts this folder in Claude Code, it offers to add the team marketplace and install the `flow` plugin.
+- When a teammate trusts this folder in Claude Code, it offers to add the marketplaces and install `flow` and the plugins the team pairs with it: `ponytail`, `pstack` and code-metrics. If the project doesn't want one of them, remove it from `enabledPlugins` and say so in the PR.
 - The `allow` list only covers read-only commands, so nothing that changes state runs without asking.
 - The `deny` list blocks reading env files and keys.
 

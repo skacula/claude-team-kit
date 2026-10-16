@@ -19,6 +19,28 @@ Two rules run through all of it:
 1. **Claude proposes, a human decides.** Nothing visible to the team (issues, milestones, review comments, merges) happens without your OK.
 2. **Nothing is "done" without evidence.** A claim needs a source, a test, or a command you ran.
 
+## The plugins around flow
+
+`flow` owns the team process: the phases, the GitHub conventions and the human gates. Three plugins change how the agent works inside each step. We install all four, and `/flow:setup-project` enables them for everyone who trusts a set-up repo.
+
+| Plugin | What it does | Commands you'll use |
+|---|---|---|
+| `ponytail` ([DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail), MIT) | Always on. Pushes every change toward the smallest complete solution, leaves a small test behind for real logic, and ends each reply with what was skipped and any risk. | `/ponytail lite\|full\|ultra`, `/ponytail-review`, `/ponytail-audit`, `/ponytail-debt` |
+| `pstack` ([michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude), MIT) | Routes multi-file, design and debugging work through `poteto-mode` playbooks (Feature, Bug fix, Refactoring and more) and its principle skills. | `/pstack:how`, `/pstack:why`, `/pstack:architect`, `/pstack:tdd`, `/pstack:thermos`, `/pstack:interrogate`, `/pstack:babysit` |
+| code-metrics (Anthropic plugin directory, MIT) | Measures complexity, long functions, large files and duplicated code, locally, with Python 3. | `/code-metrics-tracker:metrics`, `/code-metrics-tracker:refactor-targets` |
+
+Where each one helps:
+
+| Phase | flow skill | Helpers |
+|---|---|---|
+| Research | `/flow:research` | `/pstack:how` and `/pstack:why` for existing code; `/code-metrics-tracker:metrics` for a baseline |
+| Milestones | `/flow:plan-milestones` | `/pstack:architect` for slices that cross module boundaries; `/code-metrics-tracker:refactor-targets` and `/ponytail-debt` to find tech-debt slices |
+| Issues | `/flow:work-on-issue` | pstack's playbooks drive the build step; `/pstack:tdd` when a test comes first; ponytail keeps the diff small; `/pstack:deslop` before committing |
+| Review | `/flow:review-pr` | `/ponytail-review`; `/pstack:thermos` for a risky or large branch; `/pstack:interrogate` for a contested design; `/pstack:babysit` to drive CI to green |
+| Health check | none | `/ponytail-audit` and `/code-metrics-tracker:metrics`, now and then |
+
+When a pstack playbook's own PR step differs from flow's, flow wins: branch names, `Closes #N`, the PR template, follow-up issues and the human gates.
+
 ## 1. Set up your machine (once)
 
 1. Install the tools in [tools.md](tools.md): VS Code, Git, the GitHub CLI, Node.js LTS, and Claude Code (the CLI and the VS Code extension).
@@ -31,6 +53,15 @@ Two rules run through all of it:
    claude plugin install flow@claude-team-kit
    ```
    The VS Code extension and the CLI share the same configuration, so the plugin shows up in both. In a repo that's already set up you can skip this step: when you trust the folder, Claude Code offers to install it.
+   Then the plugins we pair with it:
+   ```sh
+   claude plugin marketplace add DietrichGebert/ponytail
+   claude plugin marketplace add michael-denyer/pstack-claude
+   claude plugin install ponytail@ponytail
+   claude plugin install pstack@pstack-claude
+   claude plugin install code-metrics-complexity-and-duplication-report@anthropic-plugin-directory
+   ```
+   Run these in a terminal. The VS Code chat panel answers `/plugin` with "isn't available in this environment". ponytail's hooks need `node` on your PATH and code-metrics needs Python 3; both are in [tools.md](tools.md).
 4. Optional, recommended: copy [templates/user-CLAUDE.md](../templates/user-CLAUDE.md) to `~/.claude/CLAUDE.md` (on Windows `%USERPROFILE%\.claude\CLAUDE.md`). Those are the engineering defaults Claude follows in every project. Edit it to taste; it's yours.
 5. Check it: run `claude doctor`, then in a Claude session type `/flow:` and the five skills should be listed.
 
@@ -69,6 +100,7 @@ Open the repo in VS Code, open the Claude Code panel and run `/flow:setup-projec
 - For a broad topic, ask for parallel research ("use subagents for each question"). It's faster but costs more tokens, so it's opt-in.
 - Use a high-capability model and higher effort for research and planning (`/model`).
 - Commit the report. It's the "why" behind the plan that the next engineer will want.
+- On an existing codebase, `/pstack:how` explains how a part works and `/pstack:why` digs up why it was built that way. `/code-metrics-tracker:metrics` gives a baseline.
 
 ### Phase 2: Milestones and issues
 
@@ -87,6 +119,8 @@ Open the repo in VS Code, open the Claude Code panel and run `/flow:setup-projec
 **Status:** after PRs merge, `/flow:plan-milestones status` ticks finished slices, updates the table, flags drift between the plan and GitHub, lists what's next, and asks before closing a finished milestone (after checking its acceptance was actually demonstrated).
 
 **Source of truth:** GitHub milestones and issues. The plan file is the narrative around them. If they disagree, run status mode and fix it.
+
+For a slice that crosses module boundaries, `/pstack:architect` sketches the types and modules before code. `/code-metrics-tracker:refactor-targets` and `/ponytail-debt` turn complexity hot spots and deferred `shortcut:` comments into tech-debt slices.
 
 ### Phase 3: Work on issues
 
@@ -108,6 +142,8 @@ git worktree add ../myrepo-42 -b <handle>/42-short-slug
 ```
 Open that folder in a new VS Code window. Between unrelated issues in the same session, run `/clear` so old context doesn't leak into the new task.
 
+**With pstack and ponytail:** pstack's session hook routes multi-file, design and debugging work to `poteto-mode`, which picks a playbook (Feature, Bug fix, Refactoring) for the build step. ponytail keeps the change to the smallest complete diff and ends each reply with what it skipped. Run `/pstack:deslop` before committing. They shape the code; `/flow:work-on-issue` still owns the branch, the PR and the gates.
+
 ### Phase 4: Review
 
 Every PR gets a **human** approval. Claude's review is input that frees the reviewer for judgement calls; it is never the approval.
@@ -123,6 +159,8 @@ Every PR gets a **human** approval. Claude's review is input that frees the revi
 
 **Merging:** the human reviewer merges, using the repo's merge style. Then run status mode so the plan stays current.
 
+**More review depth:** `/ponytail-review` asks whether every line is needed and safe. `/pstack:thermos` runs a deep bug, security and maintainability audit for a risky or large branch, and `/pstack:interrogate` sets several models against a contested design. `/pstack:babysit` drives an open PR's CI to green. Every finding still goes through `review-pr`'s verification before anyone sees it.
+
 ## 4. Day to day in VS Code
 
 - **The Claude Code panel** is where you talk to Claude. The file you have open and any code you've selected are shared with it automatically. Mention other files with `@path`.
@@ -130,6 +168,7 @@ Every PR gets a **human** approval. Claude's review is input that frees the revi
 - **Checkpoints:** if a change goes the wrong way, `/rewind` takes the conversation and files back to an earlier point. It doesn't undo things outside the repo (pushes, issues), which is one more reason those need your OK.
 - **Context:** `/clear` between unrelated tasks; `/compact` when a long session gets slow; `/context` shows what's using it.
 - **Model and effort:** `/model` to switch. Use more capable settings for research, planning and review, and the default for routine implementation.
+- **Paired plugins:** ponytail is always on; switch its level with `/ponytail lite`, `full` or `ultra`. Its band (cost, tokens, tests) shows in the terminal and desktop app, not in the VS Code panel. pstack spawns subagents and, for `arena`, `interrogate` and `swarm`, panels of several models, which costs more tokens. `/pstack:setup-pstack` picks its models per role or turns its session hook off.
 - **Built-in skills worth knowing:** `/code-review` (bug hunt at a chosen level; `--comment` posts inline on a PR), `/security-review`, `/simplify` (cleanup of your diff), `/init` (first `CLAUDE.md`), `/memory` (edit memory files).
 - **Agents in the plugin:** ask for them by name ("have the rust-reviewer look at this branch").
   - `rust-reviewer` (read-only): Rust best practice, backed by fmt, clippy and test output.
@@ -165,6 +204,7 @@ If something matters to the team, it goes in a shared place. Claude's memory and
 - **One issue, one PR.** Out-of-scope findings become `follow-up` issues.
 - **Mind CI cost.** macOS and Windows runners bill at a multiple of Linux. Run checks locally before pushing, and don't add expensive jobs to every PR without agreeing it first.
 - **Check licences** of new dependencies, including their latest major version.
+- **Leave ponytail's webhook empty** unless the team agrees on a shared board. Its task ledger stays on your machine, in `~/.config/ponytail/band/`.
 
 ## 7. Conventions
 
@@ -185,6 +225,8 @@ A repo's own history wins: the skills read recent PRs and match what's there.
 
 | Symptom | Fix |
 |---|---|
+| `/plugin isn't available in this environment` | The VS Code panel has no `/plugin`. Run `claude plugin ...` in a terminal. |
+| `node: command not found` after each prompt | ponytail's hooks need Node on the PATH of a non-interactive shell (nvm users: check it). |
 | `/flow:` shows nothing | `claude plugin list`; if missing, install it (section 1). Restart the session after installing or updating. |
 | `gh` answers `404` for the repo | `gh auth status`; switch to the account with access: `gh auth switch -u <account>`. |
 | Claude keeps asking to run read-only commands | The repo lacks `.claude/settings.json`; run `/flow:setup-project`. |

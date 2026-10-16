@@ -9,7 +9,7 @@ Source: <research report(s) / design doc, with paths or links>. Repo: <owner/rep
 
 | Milestone | What | Gate | Status |
 |---|---|---|---|
-| M0 | Skeleton: builds, tests, CI, CLAUDE.md, thinnest end-to-end path | | ⬜ |
+| M0 | Skeleton: builds, tests, CI, AGENTS.md, thinnest end-to-end path | | ⬜ |
 | M1 | <name> | | ⬜ |
 | M2 | <name> | ✅ <gate name> | ⬜ |
 

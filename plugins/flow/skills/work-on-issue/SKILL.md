@@ -22,7 +22,7 @@ Write issue and PR bodies to a file with your file-writing tool and pass `--body
 - Resolve the issue reference. With a URL, take `owner/repo` and the number from it, and pass `-R owner/repo` to `gh` if it isn't the current checkout's repo. If the current directory isn't a checkout of that repo, tell the user and stop. Don't work in the wrong repo. With a slice like `M2.3`, find it with `gh issue list --search "M2.3 in:title" --state all`.
 - If `gh` answers 404 for a repo you know exists, the wrong account is probably active: check `gh auth status` and ask the user to `gh auth switch`. Never read tokens yourself.
 - Run `git status`. If the working tree has uncommitted changes, or you're on a branch other than the default branch, ask the user what to do before going further. Never stash, reset or discard their work yourself.
-- Read the repo's `CLAUDE.md` (and any it references) if it isn't already in context. It defines the conventions everything below must follow: test commands, architecture rules, invariants and anything that "must also be updated".
+- Read the repo's instructions file (`AGENTS.md`, or `CLAUDE.md`/`QWEN.md` if that's what it has) (and any file it references) if it isn't already in context. It defines the conventions everything below must follow: test commands, architecture rules, invariants and anything that "must also be updated".
 - Learn the house style from recent history. One call covers it:
   ```bash
   gh pr list --state merged --limit 5 --json number,title,headRefName,body
@@ -105,15 +105,15 @@ gh issue develop <N> --base <default-branch> --name <prefix>/<N>-<short-slug> --
 Take the prefix from the repo's existing branch names (e.g. `wcolon/`). Make the slug a few words describing the fix.
 
 ### Plan, when it's more than a small fix
-For a slice that touches several files or layers, or leaves choices open, write a short plan first (files to change, tests to add, choices and your recommendation) and get the user's OK before editing. Plan mode is made for this. A one-file fix doesn't need it.
+For a slice that touches several files or layers, or leaves choices open, write a short plan first (files to change, tests to add, choices and your recommendation) and get the user's OK before editing. Use your tool's plan mode if it has one. A one-file fix doesn't need a plan.
 
 ### Do the work
 - Keep the change scoped to the issue. When you notice something else, write it down for step 5 and don't fix it here, unless leaving it would make this change wrong.
-- Follow the repo's `CLAUDE.md` to the letter. Rules like "a new route must also go in X" or "adding an error kind means updating these four places" are why repo tests exist. Never weaken an invariant it lists to make a change easier; if one is in the way, stop and ask.
+- Follow the instructions file to the letter. Rules like "a new route must also go in X" or "adding an error kind means updating these four places" are why repo tests exist. Never weaken an invariant it lists to make a change easier; if one is in the way, stop and ask.
 - Add or update tests for both the positive and the negative cases. Every frontend change gets tests that validate it.
 - Run the repo's checks (format, lint, typecheck, tests), plus the build if the change could affect it. Before you claim anything works, they must pass. If something fails and you can't fix it, say so plainly in the PR and in your report. When CI minutes are limited, run the checks locally and say so in the PR.
-- When the change adds a command, a component, a route, a convention or an invariant, update `CLAUDE.md` in the same PR so the next session knows. Keep its style: short, factual, no history.
-- Before committing, review your own diff (`git diff <default-branch>...`) for correctness, leftover debugging and scope creep. For a larger change, run the `code-review` skill on it (e.g. `/code-review high`) and fix what it confirms. Use the matching read-only reviewer agent: `rust-reviewer` for Rust changes, `ui-ux-reviewer` for UI changes, `qa-automation-engineer` for test coverage, and any reviewer the repo defines itself.
+- When the change adds a command, a component, a route, a convention or an invariant, update the instructions file in the same PR so the next session knows. Keep its style: short, factual, no history.
+- Before committing, review your own diff (`git diff <default-branch>...`) for correctness, leftover debugging and scope creep. For a larger change, run the `code-review` skill on it if your tool has one (Claude Code: `/code-review high`); otherwise reread the diff once more looking only for bugs: edge cases, error paths, inputs from outside. Fix what you confirm. Use the matching read-only reviewer agent: `rust-reviewer` for Rust changes, `ui-ux-reviewer` for UI changes, `qa-automation-engineer` for test coverage, and any reviewer the repo defines itself.
 
 ### Commit, push, open the PR
 - Commit message in the repo's style, e.g. `<Imperative summary> (#<N>)`, plus whatever attribution lines the session requires.

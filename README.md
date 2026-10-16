@@ -11,13 +11,15 @@ claude plugin marketplace add skacula/claude-team-kit
 claude plugin install flow@claude-team-kit
 ```
 
-Restart your Claude session and type `/flow:` to see the skills. In a repo that's been set up with `/flow:setup-project`, Claude Code offers the plugin when you trust the folder, so you can skip this step there.
+Restart your Claude session and type `/flow:` to see the skills.
+
+**Using Qwen or another model?** The kit isn't tied to Claude models: run Claude Code on Ollama, Qwen or OpenRouter, install it into Qwen Code with `qwen extensions install skacula/claude-team-kit:flow`, or into other agent tools with `npx skills add skacula/claude-team-kit`. See [docs/other-models.md](docs/other-models.md). In a repo that's been set up with `/flow:setup-project`, Claude Code offers the plugin when you trust the folder, so you can skip this step there.
 
 ## What's in it
 
 | Skill | Phase | What it does |
 |---|---|---|
-| `/flow:setup-project` | Once per repo | `CLAUDE.md`, shared `.claude/settings.json`, VS Code recommendations, PR/issue templates, labels |
+| `/flow:setup-project` | Once per repo | `AGENTS.md` (imported by `CLAUDE.md`), shared `.claude/settings.json`, VS Code recommendations, PR/issue templates, labels |
 | `/flow:research` | 1. Research | A sourced report: options compared, recommendation, risks, decisions for a human |
 | `/flow:plan-milestones` | 2. Milestones | Plan with milestones and acceptance criteria, then GitHub milestones, labels and `M<m>.<n>:` issues; `status` keeps it in sync |
 | `/flow:work-on-issue` | 3. Issues | Checks whether it's already fixed; otherwise a linked branch, the change with tests, and a PR; out-of-scope findings become follow-up issues |
@@ -35,6 +37,7 @@ Restart your Claude session and type `/flow:` to see the skills. In a repo that'
 
 - [docs/how-to-guide.md](docs/how-to-guide.md): the workflow, step by step
 - [docs/tools.md](docs/tools.md): every tool and how to install it on each OS
+- [docs/other-models.md](docs/other-models.md): running the kit with Qwen, local and other models
 - [templates/user-CLAUDE.md](templates/user-CLAUDE.md): optional personal defaults for `~/.claude/CLAUDE.md`
 
 ## Layout

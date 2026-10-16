@@ -13,7 +13,7 @@ Two failure modes to avoid:
 
 ## 0. Frame it
 
-- Read what you were handed **in full**: every page of a design doc, every comment on an issue. Read the repo's `CLAUDE.md` and any existing `docs/research/` and plan files, if there are any.
+- Read what you were handed **in full**: every page of a design doc, every comment on an issue. Read the repo's instructions file (`AGENTS.md`, or `CLAUDE.md`/`QWEN.md` if that's what it has) and any existing `docs/research/` and plan files, if there are any.
 - Write down, and show the user in a few lines:
   - **Goal**: what the research must let us decide or build.
   - **Constraints**: OSes, languages, budget (including CI minutes), licence policy, security or privacy rules, deadlines.
@@ -31,6 +31,8 @@ For each question:
 - **Check maintenance health**: last release, issue response, bus factor.
 - **Check cost**: hosted service pricing, CI minutes (macOS and Windows runners usually bill at a multiple of Linux), hardware.
 - **Read the existing code** when the question is about this repo. Cite `file:line`.
+
+If you have no web search tool (some models and providers don't offer one), fetch the official pages you know directly, read repositories, releases and licences with `gh`, and tell the user which questions that left thin.
 
 When several questions are independent and broad, you may hand each to a subagent in parallel, **but only if the user asked for that or agreed to the extra cost**. Give each subagent the goal, the constraints and its one question, and ask for sources with each claim.
 
@@ -50,7 +52,7 @@ Write it to `docs/research/<YYYY-MM-DD>-<short-slug>.md` in the repo, following 
 - Compare options in a table: one row per option, columns for the criteria that matter for *this* decision.
 - Put each source next to the claim it supports, with the date you accessed it.
 - **Decisions needed**: numbered, each with options, your recommendation and what changes if we choose otherwise.
-- **Proposed fixed decisions** and **proposed invariants**: the rules every milestone must keep (for example "the API binds loopback only"). Once the user accepts them, the plan and `CLAUDE.md` carry them, and nobody relitigates them.
+- **Proposed fixed decisions** and **proposed invariants**: the rules every milestone must keep (for example "the API binds loopback only"). Once the user accepts them, the plan and the instructions file carry them, and nobody relitigates them.
 - Leave out what doesn't help the decision.
 
 Write files with your file-writing tool, not shell heredocs, so the same steps work on macOS, Linux and Windows.

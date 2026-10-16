@@ -2,13 +2,13 @@
 
 This guide is for engineers joining any of our projects. It covers setting up a machine once, setting up a repo once, and then the four phases every project goes through: **research → milestones → issues → review**. Each phase has a skill in the `flow` plugin that does the legwork. You make the decisions.
 
-What you need installed is in [tools.md](tools.md). Everything here works the same on macOS, Linux and Windows.
+What you need installed is in [tools.md](tools.md). Everything here works the same on macOS, Linux and Windows, and with models other than Claude, such as Qwen or local models: see [other-models.md](other-models.md).
 
 ## The short version
 
 | Phase | You type | You get | You decide |
 |---|---|---|---|
-| Set up a repo (once) | `/flow:setup-project` | `CLAUDE.md`, shared settings, templates, labels, as a PR | What goes in `CLAUDE.md`; which labels |
+| Set up a repo (once) | `/flow:setup-project` | `AGENTS.md`, shared settings, templates, labels, as a PR | What goes in `AGENTS.md`; which labels |
 | 1. Research | `/flow:research <idea, doc or question>` | `docs/research/<date>-<slug>.md`: options compared, sources, risks, decisions needed | Every item under **Decisions needed** |
 | 2. Milestones | `/flow:plan-milestones docs/research/<file>.md` | Draft `docs/PLAN.md`, then GitHub milestones, labels and `M<m>.<n>:` issues | Approve the draft before anything is created |
 | 3. Issues | `/flow:work-on-issue #42` | A linked branch, the change with tests, a PR (or a Product update if it was already fixed) | Open choices; the plan for bigger slices |
@@ -39,12 +39,12 @@ To update later: `claude plugin marketplace update claude-team-kit` and `claude 
 ## 2. Set up a repo (once per repo)
 
 Open the repo in VS Code, open the Claude Code panel and run `/flow:setup-project`. It looks at the repo first, tells you what it will add, and then opens a PR with:
-- **`CLAUDE.md`**: the contract every session reads first: commands, architecture, invariants, conventions, testing patterns. It's filled in from the repo itself, and each command is run to make sure it works.
+- **`AGENTS.md`**, plus a one-line `CLAUDE.md` that imports it for Claude Code: the contract every session reads first, whatever the tool or model: commands, architecture, invariants, conventions, testing patterns. It's filled in from the repo itself, and each command is run to make sure it works.
 - **`.claude/settings.json`**: enables this plugin for everyone who trusts the folder, pre-approves read-only `git`/`gh` commands, and stops Claude from reading `.env` files and keys.
 - **`.vscode/extensions.json`**: the extensions for this repo's stack. VS Code offers them when you open the folder.
 - **PR and issue templates**, the standard **labels** (`area:*`, `os:*`, `follow-up`, `phase-gate`), and `.gitignore` entries for personal files.
 
-`CLAUDE.md` is the most valuable file in the repo for this workflow. Keep it accurate: every PR that adds a command, component, route, convention or invariant updates it. Keep it short and factual, without history. If a session gets something wrong because `CLAUDE.md` was missing a rule, add the rule.
+`AGENTS.md` is the most valuable file in the repo for this workflow. Keep it accurate: every PR that adds a command, component, route, convention or invariant updates it. Keep it short and factual, without history. If a session gets something wrong because `CLAUDE.md` was missing a rule, add the rule.
 
 ## 3. The workflow
 
@@ -63,7 +63,7 @@ Open the repo in VS Code, open the Claude Code panel and run `/flow:setup-projec
 3. It verifies load-bearing claims with small spikes in a scratch directory.
 4. It writes the report to `docs/research/<date>-<slug>.md` and shows you the **Decisions needed**.
 
-**Your part:** answer the decisions. They move into **Fixed decisions** and **Invariants**, which the plan and `CLAUDE.md` carry from then on, so nobody re-argues them in every PR.
+**Your part:** answer the decisions. They move into **Fixed decisions** and **Invariants**, which the plan and `AGENTS.md` carry from then on, so nobody re-argues them in every PR.
 
 **Tips:**
 - For a broad topic, ask for parallel research ("use subagents for each question"). It's faster but costs more tokens, so it's opt-in.
@@ -78,7 +78,7 @@ Open the repo in VS Code, open the Claude Code panel and run `/flow:setup-projec
 
 **What happens:**
 1. Claude drafts `docs/PLAN.md`: a status table, fixed decisions, invariants, and milestones `M0`, `M1`, …, each with a **goal** and **acceptance criteria** you can check by running something.
-   - `M0` is always the skeleton: it builds, tests and lints in CI, `CLAUDE.md` exists, and the thinnest end-to-end path works.
+   - `M0` is always the skeleton: it builds, tests and lints in CI, `AGENTS.md` exists, and the thinnest end-to-end path works.
    - Gates (a go/no-go for the next phase) are marked.
 2. Each milestone is cut into **slices**, one issue and one PR each, titled `M<m>.<n>: <outcome>`, with an acceptance checklist, `Depends on #…`, and **Out of scope** where needed. Slices are vertical (thin and end to end) and reviewable in one sitting.
 3. It shows you the draft. **Nothing goes to GitHub until you approve.**
@@ -93,10 +93,10 @@ Open the repo in VS Code, open the Claude Code panel and run `/flow:setup-projec
 **How:** `/flow:work-on-issue #42` (an issue URL or a slice name like `M2.3` also works). You can also just say "let's work on 42".
 
 **What happens:**
-1. **Orient:** it checks you're in the right repo on a clean default branch (if not, it asks; it never stashes or discards your work), reads `CLAUDE.md`, and learns branch and PR conventions from recent merged PRs.
+1. **Orient:** it checks you're in the right repo on a clean default branch (if not, it asks; it never stashes or discards your work), reads `AGENTS.md` (or `CLAUDE.md`), and learns branch and PR conventions from recent merged PRs.
 2. **Understand:** it reads the issue with all its comments, its milestone's acceptance criteria and the plan entry, and checks dependencies are closed. Open decisions come back to you with a recommendation.
 3. **Already fixed?** It searches PRs, issues and commits, then verifies against the current code. If it's resolved, it drafts a plain-language **Product update** for the reporter; after you approve, it posts it and closes the issue. No branch.
-4. **Build:** otherwise it creates a branch linked to the issue (`gh issue develop`, so it shows under the issue's Development section). For anything beyond a small fix it shows you a plan first. Then it makes the change with tests for the positive and negative cases, runs the repo's checks, updates `CLAUDE.md` if needed, and reviews its own diff (with `/code-review` for bigger changes).
+4. **Build:** otherwise it creates a branch linked to the issue (`gh issue develop`, so it shows under the issue's Development section). For anything beyond a small fix it shows you a plan first. Then it makes the change with tests for the positive and negative cases, runs the repo's checks, updates `AGENTS.md` if needed, and reviews its own diff (with `/code-review` for bigger changes).
 5. **PR:** a commit in the repo's style, then a PR with `Closes #42` and the standard sections: Choices made, What was wrong, What changed, Where to look, Tests, Follow-ups filed.
 6. **Follow-ups:** real problems it finds outside the issue become new issues labelled `follow-up`, not extra changes in this PR.
 
@@ -113,7 +113,7 @@ Open that folder in a new VS Code window. Between unrelated issues in the same s
 Every PR gets a **human** approval. Claude's review is input that frees the reviewer for judgement calls; it is never the approval.
 
 **Reviewing a teammate's PR:** `/flow:review-pr 57`. Claude:
-1. Reads the PR, its linked issue, the milestone's acceptance criteria, `CLAUDE.md` and existing comments.
+1. Reads the PR, its linked issue, the milestone's acceptance criteria, `AGENTS.md` and existing comments.
 2. Checks scope, each acceptance criterion (with evidence), the repo's invariants, tests (positive and negative; frontend changes must have tests), docs, and runs the checks (or cites the CI run).
 3. Hunts bugs with the built-in `/code-review`, and `/security-review` when the diff touches auth, crypto, network exposure, untrusted input or permissions. It hands Rust changes to `rust-reviewer` and UI changes to `ui-ux-reviewer`.
 4. **Verifies every finding** (reproduces it or names the exact lines and input) and drops what it can't substantiate. Problems that already existed on the base branch become follow-up issues, not blocking comments.
@@ -144,7 +144,7 @@ Every PR gets a **human** approval. Claude's review is input that frees the revi
 
 | What | Where | Shared? |
 |---|---|---|
-| Commands, architecture, invariants, conventions | `CLAUDE.md` in the repo | Yes, in git |
+| Commands, architecture, invariants, conventions | `AGENTS.md` in the repo (`CLAUDE.md` imports it) | Yes, in git |
 | Why we chose what we chose | `docs/research/*.md` | Yes, in git |
 | Milestones, status, fixed decisions | GitHub milestones and issues, plus `docs/PLAN.md` | Yes |
 | The reasoning behind a change | The PR body (Choices made) | Yes |
@@ -160,7 +160,7 @@ If something matters to the team, it goes in a shared place. Claude's memory and
 - **Never paste secrets, tokens or customer data into a prompt.** Shared settings deny reading `.env` files and keys; don't work around it.
 - **Approve anything outward-facing yourself:** issues, comments, reviews, pushes, releases.
 - **Claude never merges** and never approves a PR on someone's behalf.
-- **Don't weaken an invariant** in `CLAUDE.md` to make a change easier. If one is in the way, raise it.
+- **Don't weaken an invariant** in `AGENTS.md` to make a change easier. If one is in the way, raise it.
 - **Tests for the positive and the negative cases**, and every frontend change has tests.
 - **One issue, one PR.** Out-of-scope findings become `follow-up` issues.
 - **Mind CI cost.** macOS and Windows runners bill at a multiple of Linux. Run checks locally before pushing, and don't add expensive jobs to every PR without agreeing it first.
@@ -188,7 +188,8 @@ A repo's own history wins: the skills read recent PRs and match what's there.
 | `/flow:` shows nothing | `claude plugin list`; if missing, install it (section 1). Restart the session after installing or updating. |
 | `gh` answers `404` for the repo | `gh auth status`; switch to the account with access: `gh auth switch -u <account>`. |
 | Claude keeps asking to run read-only commands | The repo lacks `.claude/settings.json`; run `/flow:setup-project`. |
-| Claude uses the wrong test command or breaks a rule | `CLAUDE.md` is wrong or missing it. Fix `CLAUDE.md` in a small PR. |
+| The agent uses the wrong test command or breaks a rule | `AGENTS.md` is wrong or missing it. Fix it in a small PR. |
+| Another model skips steps or ignores the skill | Check its context length (32K at least) and size; see [other-models.md](other-models.md). Small models aren't reliable for these skills. |
 | Windows: commands fail in the Bash tool | Claude Code on Windows needs Git for Windows (it uses Git Bash). See [tools.md](tools.md). |
 | The session is slow or drifts | `/compact`, or `/clear` and restate the task. |
 

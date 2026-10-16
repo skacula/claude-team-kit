@@ -16,7 +16,7 @@ There are two modes: **create** (sections 1–4) and **status** (section 5). Wit
 ## 1. Read the inputs
 
 - The research report(s) under `docs/research/`, the design doc, or what the user described. Read them in full.
-- The repo's `CLAUDE.md`, an existing plan file, and what GitHub already has. One call each:
+- The repo's instructions file (`AGENTS.md`, or `CLAUDE.md`/`QWEN.md` if that's what it has), an existing plan file, and what GitHub already has. One call each:
   ```bash
   gh repo view --json nameWithOwner,defaultBranchRef
   gh api "repos/{owner}/{repo}/milestones?state=all&per_page=100" --jq '.[] | [.number, .title, .state, .open_issues, .closed_issues] | @tsv'
@@ -30,7 +30,7 @@ There are two modes: **create** (sections 1–4) and **status** (section 5). Wit
 Write the draft to `docs/PLAN.md` (or the path the repo already uses) following [plan-template.md](plan-template.md).
 
 **Milestones** (`M0`, `M1`, …):
-- `M0` is always the skeleton: the repo builds, tests and lints in CI, `CLAUDE.md` exists, and the thinnest end-to-end path works (one request through every layer). Everything else builds on it.
+- `M0` is always the skeleton: the repo builds, tests and lints in CI, an instructions file (`AGENTS.md`) exists, and the thinnest end-to-end path works (one request through every layer). Everything else builds on it.
 - Each milestone has a **goal** a user could observe, and **acceptance** criteria that can be checked by running something, per OS where that matters.
 - Mark **gates**: milestones whose acceptance is a go/no-go for the next phase.
 - Order by dependency, and say which milestones can run in parallel.

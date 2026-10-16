@@ -1,11 +1,11 @@
 ---
 name: setup-project
-description: Prepares a repository for the team's Claude Code workflow. Writes or refreshes CLAUDE.md, adds the shared .claude/settings.json that enables this plugin for everyone, the recommended VS Code extensions, PR and issue templates and the standard labels, and keeps personal files out of git. Works on a new or an existing repo and merges into files that already exist. Use when the user says "set up this repo for Claude", "onboard this project", "add the team kit to this repo", "bootstrap the project", "create a CLAUDE.md", or starts a new project.
+description: Prepares a repository for the team's AI coding workflow, whatever the agent tool or model. Writes or refreshes AGENTS.md (with a CLAUDE.md that imports it), adds the shared .claude/settings.json that enables this plugin for everyone, the recommended VS Code extensions, PR and issue templates and the standard labels, and keeps personal files out of git. Works on a new or an existing repo and merges into files that already exist. Use when the user says "set up this repo", "set up this repo for Claude", "onboard this project", "add the team kit to this repo", "bootstrap the project", "create an AGENTS.md" or "create a CLAUDE.md", or starts a new project.
 ---
 
 # Set up a project
 
-After this, anyone who clones the repo and trusts the folder in Claude Code gets the same plugin, the same rules (`CLAUDE.md`) and the same templates. Templates are in [templates/](templates/).
+After this, anyone who clones the repo gets the same rules, the same templates and, in Claude Code, the same plugin, whichever agent tool and model they use. Templates are in [templates/](templates/).
 
 Never overwrite a file that exists: read it and merge, keeping what's there. Show the user what will change before writing, and put the change on a branch with a PR, like any other change.
 
@@ -13,24 +13,37 @@ Never overwrite a file that exists: read it and merge, keeping what's there. Sho
 
 - `git status` and the current branch. With uncommitted changes, ask before going on.
 - `gh repo view --json nameWithOwner,defaultBranchRef,visibility` (if it isn't on GitHub yet, skip the GitHub steps and say so).
-- What exists already: `CLAUDE.md`, `CLAUDE.local.md`, `.claude/settings.json`, `.vscode/extensions.json`, `.github/pull_request_template.md`, `.github/ISSUE_TEMPLATE/`, `.gitignore`, `gh label list`.
+- What exists already: `AGENTS.md`, `CLAUDE.md`, `QWEN.md`, `CLAUDE.local.md`, `.claude/settings.json`, `.vscode/extensions.json`, `.github/pull_request_template.md`, `.github/ISSUE_TEMPLATE/`, `.gitignore`, `gh label list`.
 - The stack: build files (`package.json`, `Cargo.toml`, `pyproject.toml`, `go.mod`, `*.csproj`, `Dockerfile`, CI workflows). Read the CI workflow to learn the real commands.
-- Where this plugin was installed from: `claude plugin marketplace list` shows the `claude-team-kit` marketplace and its source (e.g. `org/claude-team-kit`). You need it for the settings file.
+- In Claude Code, `claude plugin marketplace list` shows where the `claude-team-kit` marketplace came from. You need it for the settings file. In other tools, use the default, `skacula/claude-team-kit`.
 
 Show the user a short list of what you'll add or change, and get an OK.
 
-## 1. CLAUDE.md
+## 1. The instructions file: `AGENTS.md`, imported by `CLAUDE.md`
 
-This is the contract every session reads first, so it must be accurate and short enough to keep current.
-- **No CLAUDE.md:** write one from [templates/CLAUDE.md](templates/CLAUDE.md). Fill each section from the repo itself: commands from the build files and CI (run each one to confirm it works, and note how long the slow ones take), the architecture from the directory layout and entry points, conventions from recent PRs and commits. Delete sections that don't apply. Leave `<!-- TODO -->` only where you couldn't find the answer, and list those for the user.
-- **CLAUDE.md exists:** keep it. Add only what's missing (the workflow section, commands that don't work as written, a missing invariants section), and show the diff.
+This is the contract every session reads first, so it must be accurate and short enough to keep current. It lives in `AGENTS.md` because most agent tools read that file (Qwen Code, Codex, OpenCode and GitHub Copilot among them). Claude Code reads `CLAUDE.md` instead, so `CLAUDE.md` holds one line, `@AGENTS.md`, which imports it. Don't use a symlink: symlinks break on Windows checkouts.
+
+- **No instructions file:** write `AGENTS.md` from [templates/AGENTS.md](templates/AGENTS.md) and `CLAUDE.md` from [templates/CLAUDE.md](templates/CLAUDE.md). Fill each section of `AGENTS.md` from the repo itself:
+  - commands from the build files and CI (run each one to confirm it works, and note how long the slow ones take)
+  - the architecture from the directory layout and entry points
+  - conventions from recent PRs and commits
+
+  Delete sections that don't apply. Leave `<!-- TODO -->` only where you couldn't find the answer, and list those for the user.
+- **Only `CLAUDE.md` exists:** propose moving its content to `AGENTS.md` with `git mv CLAUDE.md AGENTS.md`, which keeps its history, and then writing the one-line `CLAUDE.md`. Show the user what that does, and do it only if they agree. If they'd rather not, leave it, and tell them that tools other than Claude Code won't see the rules.
+- **`AGENTS.md` exists:** keep it. Make sure `CLAUDE.md` imports it rather than duplicating it.
+- **In every case:** add only what's missing (the workflow section, commands that don't work as written, a missing invariants section), and show the diff.
 - If the repo has a plan or research docs, link them. Invariants agreed in research belong in the **Invariants** section.
 
 ## 2. Shared settings: `.claude/settings.json`
 
 Start from [templates/settings.json](templates/settings.json). It points at `skacula/claude-team-kit`; if step 0 showed the marketplace coming from somewhere else (a fork), use that source instead. If the file exists, merge the keys: add the marketplace and the plugin, and add the permission rules that aren't already there. Don't remove the user's rules.
 
-Explain what it does: when a teammate trusts this folder, Claude Code offers to add the team marketplace and install the `flow` plugin. The `allow` list only covers read-only commands, so nothing that changes state runs without asking. The `deny` list keeps Claude from reading env files and keys.
+Explain what it does:
+- When a teammate trusts this folder in Claude Code, it offers to add the team marketplace and install the `flow` plugin.
+- The `allow` list only covers read-only commands, so nothing that changes state runs without asking.
+- The `deny` list blocks reading env files and keys.
+
+Claude Code enforces these rules whichever model it runs. Other tools have their own permission settings. Tell the user to keep those in the mode that asks before editing files or running commands, especially with smaller models.
 
 ## 3. VS Code: `.vscode/extensions.json`
 
@@ -59,10 +72,11 @@ Make sure `.gitignore` has:
 ```
 CLAUDE.local.md
 .claude/settings.local.json
+.qwen/QWEN.local.md
 ```
 
 ## 7. Commit
 
-On a branch (e.g. `<handle>/setup-claude-workflow`), commit with a message like `Set up the team's Claude Code workflow`, push, and open a PR whose body lists what was added and the TODOs left in `CLAUDE.md`. Give the user the PR link.
+On a branch (e.g. `<handle>/setup-agent-workflow`), commit with a message like `Set up the team's agent workflow`, push, and open a PR whose body lists what was added and the TODOs left in `AGENTS.md`. Give the user the PR link.
 
 Then suggest the next step: `/flow:research` for a new project, or `/flow:plan-milestones` if the scope is already known.

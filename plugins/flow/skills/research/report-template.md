@@ -1,6 +1,6 @@
 # <Topic>: research
 
-Date: <YYYY-MM-DD> · Author: <name> (with Claude Code) · Status: draft | decided
+Date: <YYYY-MM-DD> · Author: <name> (with <agent tool> and <model>) · Status: draft | decided
 
 ## Recommendation
 

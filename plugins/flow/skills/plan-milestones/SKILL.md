@@ -1,6 +1,6 @@
 ---
 name: plan-milestones
-description: Milestone creation phase. Turns a research report, design doc or agreed scope into a plan of milestones (each with a goal and testable acceptance criteria) split into PR-sized issues, then, after the user approves the draft, creates the labels, GitHub milestones and issues and keeps the plan file in sync with them. Also refreshes plan status from GitHub ("plan status", "sync the plan", "what's left in M3"). Use when the user says "plan milestones", "break this into issues", "create the milestones", "turn the research into a plan", "what's next", or after /flow:research finishes.
+description: Milestone creation phase. Turns a research report, design doc or agreed scope into a plan of milestones (each with a goal and testable acceptance criteria) split into PR-sized issues, then, after the user approves the draft, creates the labels, GitHub milestones and issues (or Jira Epics and Stories) and keeps the plan file in sync with them. Also refreshes plan status from GitHub or Jira ("plan status", "sync the plan", "what's left in M3"). Use when the user says "plan milestones", "break this into issues", "create the milestones", "turn the research into a plan", "what's next", or after /flow:research finishes.
 ---
 
 # Plan milestones
@@ -10,6 +10,8 @@ GitHub milestones and issues are the **shared source of truth** for what's plann
 Two failure modes to avoid:
 - **Issues nobody can finish.** A slice is done when its acceptance boxes can be ticked by running something. "Improve performance" is not a slice.
 - **Writing to GitHub before the user agreed.** Creating dozens of issues is visible to the whole team and tedious to undo. Draft first, create after approval.
+
+**Jira:** if the instructions file says the repo tracks issues in Jira, or the user asks for the plan in Jira, follow [jira.md](jira.md) for sections 1, 4 and 5. Milestones become Epics and slices become Stories. Everything else here applies as written.
 
 There are two modes: **create** (sections 1–4) and **status** (section 5). With no plan file and no milestones yet, it's create.
 

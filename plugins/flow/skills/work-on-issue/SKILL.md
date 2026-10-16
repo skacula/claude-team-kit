@@ -1,6 +1,6 @@
 ---
 name: work-on-issue
-description: End-to-end workflow for picking up a GitHub issue. First checks whether earlier work already fixed it; if so, drafts a Product update and closes it. If not, creates a linked branch, implements and tests the fix, and opens a PR for review. Out-of-scope findings become new issues. Use whenever the user says "let's work on #123", "let's work on <github issue url>", "work on issue 57", "pick up #186", "do M2.3", "take a look at issue …", "start on …", or otherwise hands over an issue number or URL to be worked, even without the words "issue" or "GitHub".
+description: End-to-end workflow for picking up a GitHub issue or a Jira work item. First checks whether earlier work already fixed it; if so, drafts a Product update and closes it. If not, creates a linked branch, implements and tests the fix, and opens a PR for review. Out-of-scope findings become new issues. Use whenever the user says "let's work on #123", "let's work on <github issue url>", "work on issue 57", "pick up #186", "do M2.3", "take a look at issue …", "start on …", "work on WEB-123", or otherwise hands over an issue number, a Jira key or a URL to be worked, even without the words "issue" or "GitHub".
 ---
 
 # Work on an issue
@@ -12,6 +12,8 @@ The user hands you an issue (a number like `186` / `#186`, a slice like `M2.3`, 
 3. **If it's resolved:** show the user a Product update. Once they approve it, post it and close the issue.
 4. **If it's not resolved:** create a branch linked to the issue, do the work, and open a PR for review.
 5. Throughout: anything real you notice that is *not* part of this change becomes its own new issue.
+
+**Jira:** if the instructions file says the repo tracks issues in Jira, or you're handed a Jira key (`WEB-123`) or an `atlassian.net` URL, follow this file with the commands in [jira.md](jira.md). Branches and PRs still go to GitHub.
 
 The two failure modes to avoid are **closing an issue that isn't actually fixed** and **letting a PR sprawl** into unrelated fixes. Most of the steps below exist to prevent one of those two.
 

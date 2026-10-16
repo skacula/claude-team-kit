@@ -14,8 +14,8 @@ claude plugin install flow@claude-team-kit
 Then the plugins we pair with it:
 
 ```sh
-claude plugin marketplace add DietrichGebert/ponytail#v5.3.1
-claude plugin marketplace add michael-denyer/pstack-claude#v0.9.86
+claude plugin marketplace add "DietrichGebert/ponytail#v5.3.1"
+claude plugin marketplace add "michael-denyer/pstack-claude#v0.9.86"
 claude plugin install ponytail@ponytail
 claude plugin install pstack@pstack-claude
 claude plugin install code-metrics-complexity-and-duplication-report@anthropic-plugin-directory

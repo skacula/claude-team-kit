@@ -18,7 +18,7 @@ Put the settings in the repo's **`.claude/settings.local.json`**. It's git-ignor
 
 The reviewer agents use `model: inherit`, so they run on whatever model the session uses. Claude Code's background tasks use the `haiku` alias, which is why each example below maps all three aliases.
 
-pstack's subagents ask for the `opus` and `fable` aliases by name. With another model, either add `"ANTHROPIC_DEFAULT_FABLE_MODEL"` to the `env` block, mapped like the others, or run `/pstack:setup-pstack` and set its roles to `inherit-parent` so every subagent uses the session's model.
+pstack's subagents also ask for `fable`, so each example maps it too. To run them on the session's model instead, run `/pstack:setup-pstack` and set its roles to `inherit-parent`.
 
 ### Local, free and private: Ollama
 
@@ -39,7 +39,8 @@ Nothing leaves your machine. This needs Ollama 0.14 or later and a machine that 
        "ANTHROPIC_MODEL": "qwen3-coder",
        "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3-coder",
        "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3-coder",
-       "ANTHROPIC_DEFAULT_HAIKU_MODEL": "qwen3-coder"
+       "ANTHROPIC_DEFAULT_HAIKU_MODEL": "qwen3-coder",
+       "ANTHROPIC_DEFAULT_FABLE_MODEL": "qwen3-coder"
      }
    }
    ```
@@ -59,7 +60,8 @@ Alibaba offers an Anthropic-compatible endpoint for Claude Code. The URL depends
     "ANTHROPIC_MODEL": "<model name from the same guide>",
     "ANTHROPIC_DEFAULT_OPUS_MODEL": "<same>",
     "ANTHROPIC_DEFAULT_SONNET_MODEL": "<same>",
-    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "<a smaller Qwen model, or the same>"
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "<a smaller Qwen model, or the same>",
+    "ANTHROPIC_DEFAULT_FABLE_MODEL": "<same as ANTHROPIC_MODEL>"
   }
 }
 ```
@@ -75,7 +77,8 @@ Alibaba offers an Anthropic-compatible endpoint for Claude Code. The URL depends
     "ANTHROPIC_MODEL": "<an OpenRouter model id, e.g. a qwen/… coder model>",
     "ANTHROPIC_DEFAULT_OPUS_MODEL": "<same>",
     "ANTHROPIC_DEFAULT_SONNET_MODEL": "<same>",
-    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "<same or smaller>"
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "<same or smaller>",
+    "ANTHROPIC_DEFAULT_FABLE_MODEL": "<same as ANTHROPIC_MODEL>"
   }
 }
 ```

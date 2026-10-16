@@ -53,15 +53,7 @@ When a pstack playbook's own PR step differs from flow's, flow wins: branch name
    claude plugin install flow@claude-team-kit
    ```
    The VS Code extension and the CLI share the same configuration, so the plugin shows up in both. In a repo that's already set up you can skip this step: when you trust the folder, Claude Code offers to install it.
-   Then the plugins we pair with it:
-   ```sh
-   claude plugin marketplace add DietrichGebert/ponytail
-   claude plugin marketplace add michael-denyer/pstack-claude
-   claude plugin install ponytail@ponytail
-   claude plugin install pstack@pstack-claude
-   claude plugin install code-metrics-complexity-and-duplication-report@anthropic-plugin-directory
-   ```
-   Run these in a terminal. The VS Code chat panel answers `/plugin` with "isn't available in this environment". ponytail's hooks need `node` on your PATH and code-metrics needs Python 3; both are in [tools.md](tools.md).
+   Then install the paired plugins with the commands in the [README](../README.md#install). Run them in a terminal. The VS Code chat panel answers `/plugin` with "isn't available in this environment". ponytail's hooks need `node` on your PATH and code-metrics needs Python 3; both are in [tools.md](tools.md).
 4. Optional, recommended: copy [templates/user-CLAUDE.md](../templates/user-CLAUDE.md) to `~/.claude/CLAUDE.md` (on Windows `%USERPROFILE%\.claude\CLAUDE.md`). Those are the engineering defaults Claude follows in every project. Edit it to taste; it's yours.
 5. Check it: run `claude doctor`, then in a Claude session type `/flow:` and the five skills should be listed.
 

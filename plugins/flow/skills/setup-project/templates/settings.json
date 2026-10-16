@@ -10,13 +10,15 @@
     "ponytail": {
       "source": {
         "source": "github",
-        "repo": "DietrichGebert/ponytail"
+        "repo": "DietrichGebert/ponytail",
+        "ref": "v5.3.1"
       }
     },
     "pstack-claude": {
       "source": {
         "source": "github",
-        "repo": "michael-denyer/pstack-claude"
+        "repo": "michael-denyer/pstack-claude",
+        "ref": "v0.9.86"
       }
     }
   },

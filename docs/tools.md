@@ -30,6 +30,7 @@ After installing: `gh auth login`, `claude` then `/login`, and `claude doctor`.
 | Claude account skills | `deep-research`, `docx`, `pdf`, `pptx`, `xlsx`, `skill-creator` | Available when enabled on your claude.ai account; optional |
 | `find-skills` (optional) | Searches the open skills ecosystem for a skill that fits a task | `npx skills add vercel-labs/skills` and pick `find-skills` |
 | `sentry-cli` skill (optional) | Using Sentry from the command line | Only for projects on Sentry; find it with `npx skills find sentry` |
+| [Atlassian CLI](https://developer.atlassian.com/cloud/acli/guides/install-acli/) (`acli`, only for repos that track issues in Jira) | The skills use it for Jira work items, Epics, comments and transitions; code and PRs still use `gh`. Jira Cloud only | `brew tap atlassian/acli && brew install acli` on macOS; the install page has Windows and Linux. Then `acli jira auth login --web` |
 | Other models (optional) | Ollama for local models; Qwen Code; other agent tools | See [other-models.md](other-models.md) |
 | MCP servers (optional, per project) | Live docs or services inside Claude | Add to the repo's `.mcp.json` only when a project needs one. We use `gh` rather than a GitHub MCP server: it's already installed, works the same everywhere and costs fewer tokens |
 

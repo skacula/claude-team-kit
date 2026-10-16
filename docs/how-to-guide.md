@@ -112,6 +112,8 @@ Open the repo in VS Code, open the Claude Code panel and run `/flow:setup-projec
 
 **Source of truth:** GitHub milestones and issues. The plan file is the narrative around them. If they disagree, run status mode and fix it.
 
+**Using Jira instead:** if `AGENTS.md` says the repo tracks issues in Jira (`/flow:setup-project` asks and writes that line), the skills use the Atlassian CLI, `acli`, for the issue side. Milestones become Epics, slices become Stories under them, `Depends on` becomes a `Blocks` link, and labels keep their names. Branches and PRs stay on GitHub, with the Jira key in the branch name and PR title (`wcolon/WEB-42-health-check`, `Add a health check endpoint (WEB-42)`) so the GitHub for Jira app links them. Merging a PR doesn't close the work item: status mode lists the ones whose PR merged and asks before moving them to done. `/flow:work-on-issue WEB-42` or a Jira URL works the same as `#42`.
+
 For a slice that crosses module boundaries, `/pstack:architect` sketches the types and modules before code. `/code-metrics-tracker:refactor-targets` and `/ponytail-debt` turn complexity hot spots and deferred `shortcut:` comments into tech-debt slices.
 
 ### Phase 3: Work on issues
@@ -177,7 +179,7 @@ Every PR gets a **human** approval. Claude's review is input that frees the revi
 |---|---|---|
 | Commands, architecture, invariants, conventions | `AGENTS.md` in the repo (`CLAUDE.md` imports it) | Yes, in git |
 | Why we chose what we chose | `docs/research/*.md` | Yes, in git |
-| Milestones, status, fixed decisions | GitHub milestones and issues, plus `docs/PLAN.md` | Yes |
+| Milestones, status, fixed decisions | GitHub milestones and issues (or Jira Epics and Stories), plus `docs/PLAN.md` | Yes |
 | The reasoning behind a change | The PR body (Choices made) | Yes |
 | Your personal preferences for one repo | `CLAUDE.local.md` (git-ignored) | No |
 | Your defaults for every repo | `~/.claude/CLAUDE.md` | No |
@@ -210,6 +212,7 @@ If something matters to the team, it goes in a shared place. Claude's memory and
 | PR title | Like the commit | `Show dates in the user's time zone (#125)` |
 | PR body | `Closes #<issue>` + the template's sections | see `.github/pull_request_template.md` |
 | Labels | `area:<part>`, `os:<name>`, `follow-up`, `phase-gate`, GitHub defaults | `area:api` |
+| Jira repos | Epic `M<m>: <name>`, Story `M<m>.<n>: …` under it; key in branch, commit and PR title; PR body starts `Jira: <KEY-N>` | `wcolon/WEB-42-health-check` |
 
 A repo's own history wins: the skills read recent PRs and match what's there.
 
@@ -220,6 +223,7 @@ A repo's own history wins: the skills read recent PRs and match what's there.
 | `/plugin isn't available in this environment` | The VS Code panel has no `/plugin`. Run `claude plugin ...` in a terminal. |
 | `node: command not found` after each prompt | ponytail's hooks need Node on the PATH of a non-interactive shell (nvm users: check it). |
 | `/flow:` shows nothing | `claude plugin list`; if missing, install it (section 1). Restart the session after installing or updating. |
+| `acli` says you're not authenticated, or shows another site | `acli jira auth login --web`, or `acli jira auth switch` to the right site. |
 | `gh` answers `404` for the repo | `gh auth status`; switch to the account with access: `gh auth switch -u <account>`. |
 | Claude keeps asking to run read-only commands | The repo lacks `.claude/settings.json`; run `/flow:setup-project`. |
 | The agent uses the wrong test command or breaks a rule | `AGENTS.md` is wrong or missing it. Fix it in a small PR. |

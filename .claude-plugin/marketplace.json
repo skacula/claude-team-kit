@@ -10,7 +10,7 @@
       "source": "./plugins/flow",
       "description": "Skills for each phase of our workflow (setup-project, research, plan-milestones, work-on-issue, review-pr) plus our shared agents.",
       "category": "engineering",
-      "keywords": ["workflow", "github", "milestones", "issues", "code-review", "research"]
+      "keywords": ["workflow", "github", "jira", "milestones", "issues", "code-review", "research"]
     }
   ]
 }

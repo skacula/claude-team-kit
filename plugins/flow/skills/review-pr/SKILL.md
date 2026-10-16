@@ -22,7 +22,7 @@ gh pr view <N> --json number,title,body,author,baseRefName,headRefName,closingIs
 gh pr diff <N>
 gh pr checks <N>
 ```
-- Read the linked issue(s) in full, with comments, and their milestone's acceptance criteria. That's the definition of done.
+- Read the linked issue(s) in full, with comments, and their milestone's acceptance criteria. That's the definition of done. In a repo that tracks issues in Jira, the work item's key is in the PR title, branch or body: read it with `acli jira workitem view <KEY-N> --fields summary,description,status,parent,issuelinks --json` and `acli jira workitem comment list --key <KEY-N> --paginate`, and the parent Epic's description holds the milestone's acceptance.
 - Read the repo's instructions file (`AGENTS.md`, or `CLAUDE.md`/`QWEN.md` if that's what it has). Its invariants and "must also update" rules are the checklist for this repo.
 - Read existing review comments (`gh api --paginate "repos/{owner}/{repo}/pulls/<N>/comments"` and `gh pr view <N> --comments`) so you don't repeat them. Without `--paginate` you get only the first 30.
 
@@ -63,7 +63,7 @@ Go through these in order, and note evidence for each:
 ### Questions
 1. …
 
-**Follow-ups filed:** #<n> <title> (existing problems, not caused by this PR)
+**Follow-ups filed:** #<n> or <KEY-N> <title> (existing problems, not caused by this PR)
 ```
 
 The verdict follows from the findings: **request changes** if anything is blocking, **comment** if there are only should-fix items or questions, **approve** only if the user is the reviewer and asks for it.

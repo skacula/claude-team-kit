@@ -3,7 +3,7 @@
 Source: <research report(s) / design doc, with paths or links>. Repo: <owner/repo>. Last updated: <YYYY-MM-DD>.
 
 **Workflow:** one PR per slice, branch `<handle>/<issue>-<slug>` off `<default branch>`, PR body `Closes #<issue>`.
-**Tracking:** every slice below is a GitHub issue titled `M<m>.<n>: …` in its milestone. Close the issue and tick the line here together.
+**Tracking:** every slice below is a GitHub issue titled `M<m>.<n>: …` in its milestone (in Jira: a Story under its milestone's Epic in project `<KEY>`). Close the issue and tick the line here together.
 
 ## Status at a glance
 

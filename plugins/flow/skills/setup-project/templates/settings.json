@@ -44,7 +44,12 @@
       "Bash(gh label list:*)",
       "Bash(gh repo view:*)",
       "Bash(gh run list:*)",
-      "Bash(gh run view:*)"
+      "Bash(gh run view:*)",
+      "Bash(acli jira auth status:*)",
+      "Bash(acli jira project view:*)",
+      "Bash(acli jira workitem view:*)",
+      "Bash(acli jira workitem search:*)",
+      "Bash(acli jira workitem comment list:*)"
     ],
     "deny": [
       "Read(./**/.env)",

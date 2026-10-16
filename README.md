@@ -31,7 +31,7 @@ Restart your Claude session and type `/flow:` to see the skills. Run these in a 
 |---|---|---|
 | `/flow:setup-project` | Once per repo | `AGENTS.md` (imported by `CLAUDE.md`), shared `.claude/settings.json`, VS Code recommendations, PR/issue templates, labels |
 | `/flow:research` | 1. Research | A sourced report: options compared, recommendation, risks, decisions for a human |
-| `/flow:plan-milestones` | 2. Milestones | Plan with milestones and acceptance criteria, then GitHub milestones, labels and `M<m>.<n>:` issues; `status` keeps it in sync |
+| `/flow:plan-milestones` | 2. Milestones | Plan with milestones and acceptance criteria, then GitHub milestones, labels and `M<m>.<n>:` issues (or Jira Epics and Stories); `status` keeps it in sync |
 | `/flow:work-on-issue` | 3. Issues | Checks whether it's already fixed; otherwise a linked branch, the change with tests, and a PR; out-of-scope findings become follow-up issues |
 | `/flow:review-pr` | 4. Review | A verified review against the issue's acceptance and the repo's invariants, posted only with your OK; also works through review comments on your own PR |
 

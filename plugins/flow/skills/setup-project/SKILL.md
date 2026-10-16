@@ -15,6 +15,7 @@ Never overwrite a file that exists: read it and merge, keeping what's there. Sho
 - `gh repo view --json nameWithOwner,defaultBranchRef,visibility` (if it isn't on GitHub yet, skip the GitHub steps and say so).
 - What exists already: `AGENTS.md`, `CLAUDE.md`, `QWEN.md`, `CLAUDE.local.md`, `.claude/settings.json`, `.vscode/extensions.json`, `.github/pull_request_template.md`, `.github/ISSUE_TEMPLATE/`, `.gitignore`, `gh label list`.
 - The stack: build files (`package.json`, `Cargo.toml`, `pyproject.toml`, `go.mod`, `*.csproj`, `Dockerfile`, CI workflows). Read the CI workflow to learn the real commands.
+- Where issues are tracked: GitHub issues and milestones (the default), or Jira. Ask the user if you can't tell. For Jira, get the project key and site, and check `acli jira auth status` shows that site (if it doesn't, ask the user to run `acli jira auth login --web`). The code and PRs stay on GitHub either way.
 - In Claude Code, `claude plugin marketplace list` shows where the `claude-team-kit` marketplace came from. You need it for the settings file. In other tools, use the default, `skacula/claude-team-kit`.
 
 Show the user a short list of what you'll add or change, and get an OK.
@@ -32,6 +33,7 @@ This is the contract every session reads first, so it must be accurate and short
 - **Only `CLAUDE.md` exists:** propose moving its content to `AGENTS.md` with `git mv CLAUDE.md AGENTS.md`, which keeps its history, and then writing the one-line `CLAUDE.md`. Show the user what that does, and do it only if they agree. If they'd rather not, leave it, and tell them that tools other than Claude Code won't see the rules.
 - **`AGENTS.md` exists:** keep it. Make sure `CLAUDE.md` imports it rather than duplicating it.
 - **In every case:** add only what's missing (the workflow section, commands that don't work as written, a missing invariants section), and show the diff.
+- For a Jira repo, swap the first two **Workflow** bullets for the Jira version in the template's comment, with the real project key and site. The other skills read that line to know where issues live.
 - If the repo has a plan or research docs, link them. Invariants agreed in research belong in the **Invariants** section.
 
 ## 2. Shared settings: `.claude/settings.json`
@@ -55,9 +57,11 @@ If absent, add:
 - [templates/pull_request_template.md](templates/pull_request_template.md) → `.github/pull_request_template.md`
 - [templates/ISSUE_TEMPLATE/slice.md](templates/ISSUE_TEMPLATE/slice.md) and [templates/ISSUE_TEMPLATE/bug.md](templates/ISSUE_TEMPLATE/bug.md) → `.github/ISSUE_TEMPLATE/`
 
-If the repo has its own templates, keep them, and tell the user how they differ from the team's.
+If the repo has its own templates, keep them, and tell the user how they differ from the team's. For a Jira repo, add only the PR template: the issue templates don't reach Jira.
 
 ## 5. Labels
+
+For a Jira repo, skip this step: Jira creates a label the first time it's used, and `plan-milestones` uses the same names there.
 
 Ask before creating labels, since they're visible to everyone. Propose:
 - `follow-up` ("Found while delivering a slice"), `phase-gate` ("A gate or end-to-end verification")

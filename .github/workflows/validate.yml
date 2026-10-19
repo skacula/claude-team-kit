@@ -17,8 +17,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm install -g @anthropic-ai/claude-code
+      # Pinned so a Claude Code release can't turn CI red by itself. When you bump it, recheck that
+      # its read-only git and gh lists still cover the skills' flags and reject --output
+      # (setup-project/SKILL.md relies on that).
+      - run: npm install -g @anthropic-ai/claude-code@2.1.303
       - name: Validate the marketplace
         run: claude plugin validate .
       - name: Validate the flow plugin
         run: claude plugin validate plugins/flow
+      - name: README pins match the settings template
+        run: |
+          for ref in $(jq -r '.extraKnownMarketplaces[].source.ref // empty' plugins/flow/skills/setup-project/templates/settings.json); do
+            grep -q "#$ref\"" README.md || { echo "README.md doesn't pin $ref like the settings template"; exit 1; }
+          done

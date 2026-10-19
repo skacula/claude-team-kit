@@ -25,7 +25,7 @@ acli jira workitem comment list --key <KEY-N> --paginate --json
 
 ```bash
 gh search prs --repo <owner/repo> "<KEY-N>" --json number,title,state,closedAt,url
-git log --oneline -E --grep='<KEY-N>([^0-9]|$)'
+git log --oneline --grep='<KEY-N>[^0-9]' --grep='<KEY-N>$'
 git log --oneline --since=<created> -- <files the item concerns>
 acli jira workitem search --jql 'project = <KEY> AND statusCategory = Done AND text ~ "<key words>"' --fields key,summary,status --csv
 ```

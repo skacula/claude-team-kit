@@ -49,7 +49,7 @@ Report the Epic URLs (`https://<site>/browse/<EPIC-KEY>`) and the number of stor
 
 ## 5. Status mode
 
-- Read the Epics and their children as in section 1, plus recently merged PRs: `gh pr list --state merged --limit 30 --json number,title,headRefName,mergedAt,url`. A PR belongs to the work item whose key is in its title or branch name.
+- Read the Epics and their children as in section 1. For each slice that isn't done, look for its merged PR: `gh pr list --state merged --search "<KEY-N>" --json number,title,body,headRefName,mergedAt,url`. That searches titles and bodies, and the PR body starts with `Jira: [<KEY-N>]`. Search is fuzzy, so keep only PRs whose title, body or branch has the key followed by a non-digit or the end (`WEB-42`, not `WEB-420`).
 - A slice is done when its status category is `done`. A merged PR whose work item isn't done yet is drift: list those items, and **ask** before moving them (`acli jira workitem transition --key <KEY-N> --status "Done" --yes`, with the project's own status name).
 - The rest of the drift checks are the same as on GitHub. A Story whose parent changed is the Jira version of "an issue whose milestone changed".
 - An Epic with no open children: check its acceptance was demonstrated, then **ask** before you move the Epic to done.

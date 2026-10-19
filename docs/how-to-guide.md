@@ -57,13 +57,13 @@ When a pstack playbook's own PR step differs from flow's, flow wins: branch name
 4. Optional, recommended: copy [templates/user-CLAUDE.md](../templates/user-CLAUDE.md) to `~/.claude/CLAUDE.md` (on Windows `%USERPROFILE%\.claude\CLAUDE.md`). Those are the engineering defaults Claude follows in every project. Edit it to taste; it's yours.
 5. Check it: run `claude doctor`, then in a Claude session type `/flow:` and the five skills should be listed.
 
-To update later: `claude plugin marketplace update claude-team-kit` and `claude plugin update flow@claude-team-kit`, then restart the session.
+To update later: `claude plugin marketplace update claude-team-kit` and `claude plugin update flow@claude-team-kit`, then restart the session. When an update changes the repo template (new pins, withdrawn permission rules), run `/flow:setup-project` again in each repo you've set up: it updates `.claude/settings.json` in a PR, and everyone who pulls it gets the change.
 
 ## 2. Set up a repo (once per repo)
 
 Open the repo in VS Code, open the Claude Code panel and run `/flow:setup-project`. It looks at the repo first, tells you what it will add, and then opens a PR with:
 - **`AGENTS.md`**, plus a one-line `CLAUDE.md` that imports it for Claude Code: the contract every session reads first, whatever the tool or model: commands, architecture, invariants, conventions, testing patterns. It's filled in from the repo itself, and each command is run to make sure it works.
-- **`.claude/settings.json`**: enables this plugin for everyone who trusts the folder, pre-approves read-only `git`/`gh` commands, and stops Claude's Read tool from opening `.env` files and keys in any folder.
+- **`.claude/settings.json`**: enables this plugin for everyone who trusts the folder, pre-approves read-only commands, and stops Claude's Read tool from opening `.env` files and keys in any folder.
 - **`.vscode/extensions.json`**: the extensions for this repo's stack. VS Code offers them when you open the folder.
 - **PR and issue templates**, the standard **labels** (`area:*`, `os:*`, `follow-up`, `phase-gate`), and `.gitignore` entries for personal files.
 
@@ -225,7 +225,7 @@ A repo's own history wins: the skills read recent PRs and match what's there.
 | `/flow:` shows nothing | `claude plugin list`; if missing, install it (section 1). Restart the session after installing or updating. |
 | `acli` says you're not authenticated, or shows another site | `acli jira auth login --web`, or `acli jira auth switch` to the right site. |
 | `gh` answers `404` for the repo | `gh auth status`; switch to the account with access: `gh auth switch -u <account>`. |
-| Claude keeps asking to run read-only commands | The repo lacks `.claude/settings.json`; run `/flow:setup-project`. |
+| Claude asks before a read-only `git` or `gh` command | It used a flag Claude Code doesn't treat as read-only. Allow it once, and don't add a prefix rule such as `Bash(gh pr view:*)`: it would approve every flag. For `acli` commands, the repo lacks `.claude/settings.json`: run `/flow:setup-project`. |
 | The agent uses the wrong test command or breaks a rule | `AGENTS.md` is wrong or missing it. Fix it in a small PR. |
 | Another model skips steps or ignores the skill | Check its context length (32K at least) and size; see [other-models.md](other-models.md). Small models aren't reliable for these skills. |
 | Windows: commands fail in the Bash tool | Claude Code on Windows needs Git for Windows (it uses Git Bash). See [tools.md](tools.md). |
@@ -236,7 +236,7 @@ A repo's own history wins: the skills read recent PRs and match what's there.
 The kit is a repo like any other, with the same workflow: an issue, a branch, a PR, a review.
 - Skills are in `plugins/flow/skills/<name>/SKILL.md`. The `description` decides when Claude uses it, so name the phrases people actually say.
 - Agents are in `plugins/flow/agents/`. Quote a `description` that contains `: `, or YAML can't parse it.
-- Bump `version` in `plugins/flow/.claude-plugin/plugin.json` with every change, so `claude plugin update` picks it up.
+- Every merged commit is a new version: `claude plugin update` picks it up. Don't add a `version` to `plugins/flow/.claude-plugin/plugin.json`, or updates stop until someone bumps it.
 - Run `claude plugin validate .` and `claude plugin validate plugins/flow` before pushing (CI runs both).
 - Try a change locally first: `claude plugin marketplace add <path to your clone>`, then install from it.
 - The `skill-creator` skill (if your account has it) can help write and test a new skill.

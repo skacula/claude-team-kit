@@ -38,11 +38,18 @@ This is the contract every session reads first, so it must be accurate and short
 
 ## 2. Shared settings: `.claude/settings.json`
 
-Start from [templates/settings.json](templates/settings.json). It points at `skacula/claude-team-kit`; if step 0 showed the marketplace coming from somewhere else (a fork), use that source instead. If the file exists, merge the keys: add the marketplace and the plugin, and add the permission rules that aren't already there. Don't remove the user's rules.
+Start from [templates/settings.json](templates/settings.json). It points at `skacula/claude-team-kit`; if step 0 showed the marketplace coming from somewhere else (a fork), use that source instead.
+
+If the file exists, merge into it:
+- Add the marketplaces, plugins and permission rules that aren't already there. Keep the user's other rules.
+- If a marketplace `ref` differs from the template's, show both and ask which to keep.
+- Remove the rules earlier versions of this kit added and have since withdrawn, and list them in the PR: `Bash(git status:*)`, `Bash(git diff:*)`, `Bash(git log:*)`, `Bash(git show:*)`. A "don't ask again" answer may have saved the same rules in the user's own `.claude/settings.local.json` or `~/.claude/settings.json`: check those too, and offer to remove them there. Read only their `permissions.allow` (`jq '.permissions.allow' <file>`), never the whole file: these files can hold API keys.
+
+Re-running this skill on a repo that's already set up is how a repo picks up a newer template: it changes only what differs, in one PR.
 
 Explain what it does:
-- When a teammate trusts this folder in Claude Code, it offers to add the marketplaces and install `flow` and the plugins the team pairs with it: `ponytail`, `pstack` and code-metrics. If the project doesn't want one of them, remove it from `enabledPlugins` and say so in the PR. ponytail and pstack are pinned to a release tag (`ref`); keep the pin.
-- The `allow` list only covers read-only commands, so nothing that changes state runs without asking.
+- When a teammate trusts this folder in Claude Code, it offers to add the marketplaces and install `flow` and the plugins the team pairs with it: `ponytail`, `pstack` and code-metrics. If the project doesn't want one of them, remove it from `enabledPlugins` and say so in the PR. ponytail and pstack are pinned to a release tag (`ref`); don't remove the pin.
+- Claude Code already runs read-only `git` and `gh` commands without asking, and still asks for flags that write (such as `--output`). The `allow` list adds only the read-only `acli` commands it doesn't know. Don't add prefix rules for `git` or `gh`: they match every flag.
 - The `deny` list stops Claude's Read tool from opening env files, keys and `secrets/` folders anywhere in the repo. It doesn't cover shell commands such as `cat`, which still ask first.
 
 Claude Code enforces these rules whichever model it runs. Other tools have their own permission settings. Tell the user to keep those in the mode that asks before editing files or running commands, especially with smaller models.

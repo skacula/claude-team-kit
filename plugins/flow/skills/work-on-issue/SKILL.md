@@ -52,7 +52,7 @@ Issues are often fixed as a side effect of other work, and the reporter is never
 gh search prs  --repo <owner/repo> "<N>" --json number,title,state,closedAt,url
 gh search issues --repo <owner/repo> "<N>" --json number,title,state,url
 # Commits that mention it, and everything since it was filed that touched the relevant code
-git log --oneline -E --grep='#<N>([^0-9]|$)'
+git log --oneline --grep='#<N>[^0-9]' --grep='#<N>$'
 git log --oneline --since=<createdAt> -- <files the issue concerns>
 # Related later work, searched by the issue's key words
 gh search issues --repo <owner/repo> "<key words>" --state closed --json number,title,closedAt,url

@@ -74,7 +74,7 @@ Report the milestone URLs and the number of issues created per milestone.
 ## 5. Status mode
 
 When asked for status, or after a PR merges:
-- Read the milestones and issues as in section 1, plus recently merged PRs: `gh pr list --state merged --limit 30 --json number,title,mergedAt,closingIssuesReferences`.
+- Read the milestones and issues as in section 1. For each slice whose issue is closed but not yet ticked in the plan, get the PR that closed it: `gh issue view <N> --json closedByPullRequestsReferences`. For what's in progress: `gh pr list --state open --json number,title,headRefName,closingIssuesReferences`.
 - In the plan file: tick slices whose issue is closed (with the PR number), update the status table (⬜ not started, 🟡 in progress, ✅ done), and add new issues that appeared in a milestone (follow-ups) under it.
 - Flag drift both ways: an issue closed without its plan line ticked, a plan line with no issue (search its title as in section 4 before flagging it, since the list stops at 200), an issue whose milestone changed, an open issue whose acceptance boxes are all ticked.
 - A milestone with no open issues left: check its acceptance criteria were actually demonstrated (a gate needs its end-to-end check run), then **ask** before closing it: `gh api -X PATCH "repos/{owner}/{repo}/milestones/<n>" -f state=closed`.

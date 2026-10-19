@@ -133,7 +133,7 @@ Test before relying on a model. In a scratch repo, run `/flow:work-on-issue` on 
 
 ## Rules that don't change with the model
 
-- **The human gates are enforced by the tool, not the model.** In Claude Code, the shared settings pre-approve only read-only `git` and `gh` commands, so creating an issue, posting a review or pushing still asks you, whatever the model does. Keep that true: don't widen the allow list, and don't use bypass or auto modes with weaker models.
+- **The human gates are enforced by the tool, not the model.** In Claude Code, the shared settings pre-approve only read-only commands, so creating an issue, posting a review or pushing still asks you, whatever the model does. Keep that true: don't widen the allow list, and don't use bypass or auto modes with weaker models.
 - **Your code goes to whoever runs the model.** A local Ollama model keeps it on your machine. A hosted model, free ones especially, sends your code and prompts to that provider under its terms, which may include logging or training. Check the provider's terms and the project's policy before using a hosted model on company or private code.
 - **Keep keys out of git.** API keys go in `.claude/settings.local.json` (git-ignored) or your user settings, never in `.claude/settings.json`.
 - **Write down the model.** Research reports name the tool and model that produced them; PRs should too when it isn't Claude. It tells the reviewer how closely to check.

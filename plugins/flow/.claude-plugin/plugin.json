@@ -1,6 +1,5 @@
 {
   "name": "flow",
-  "version": "1.4.0",
   "description": "Our team's Claude Code workflow: set up a project, research, plan milestones and issues, work an issue to a PR, review a PR.",
   "author": {
     "name": "Wilfredo Colon"
